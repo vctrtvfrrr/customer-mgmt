@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Customer } from './customers/customer.entity';
+import { CustomersModule } from './customers/customers.module';
 
 @Module({
   imports: [
@@ -10,9 +12,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASS,
       database: process.env.POSTGRES_DATABASE,
-      entities: [],
+      entities: [Customer],
       synchronize: true,
     }),
+    CustomersModule,
   ],
   controllers: [],
   providers: [],
