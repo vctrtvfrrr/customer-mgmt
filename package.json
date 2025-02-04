@@ -1,0 +1,9 @@
+{
+  "name": "customer-mgmt",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "prettier": "^3.4.2",
+    "prettier-plugin-tailwindcss": "^0.6.11"
+  }
+}
