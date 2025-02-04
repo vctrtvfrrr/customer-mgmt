@@ -1,4 +1,19 @@
 services:
+  web:
+    build:
+      context: ./web
+      target: ${NODE_ENV:-production}
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      NEXT_PUBLIC_API_URL: ${API_URL}
+    ports:
+      - "${WEB_PORT}:3000"
+    restart: unless-stopped
+    networks:
+      - internal
+
   postgres:
     image: postgres:latest
     ports:
