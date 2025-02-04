@@ -11,6 +11,24 @@ services:
     ports:
       - "${WEB_PORT}:3000"
     restart: unless-stopped
+    depends_on:
+      - api
+    networks:
+      - internal
+
+  api:
+    build:
+      context: ./api
+      target: ${NODE_ENV:-production}
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+    ports:
+      - "${API_PORT}:3000"
+    restart: unless-stopped
+    depends_on:
+      - postgres
     networks:
       - internal
 
