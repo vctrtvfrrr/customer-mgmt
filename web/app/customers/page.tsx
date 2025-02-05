@@ -1,13 +1,25 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+import { count } from './_actions/customers'
 import CustomerCard from './_components/CustomerCard'
 
 export default function CustomersPage() {
+  const [total, setTotal] = useState(0)
+
+  useEffect(() => {
+    async function countCustomers() {
+      const countCustomers = await count()
+      setTotal(countCustomers.total)
+    }
+    countCustomers()
+  }, [total])
+
   return (
     <main className="container my-8">
       <div className="mb-2.5 flex justify-between">
         <h2 className="text-lg leading-6">
-          <strong>16</strong> clientes encontrados:
+          <strong>{total}</strong> clientes encontrados:
         </h2>
 
         <div className="flex">
