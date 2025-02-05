@@ -1,4 +1,4 @@
-import CustomersHeader from './header'
+import CustomersHeader from './_components/Header'
 
 export default function CustomersLayout({
   children,

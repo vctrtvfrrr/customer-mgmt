@@ -1,12 +1,12 @@
 'use client'
 
+import { useUserStore } from '@/app/_store/useUserStore'
+import metadata from '@/config'
+import logo from '@/public/logo.png'
 import Image from 'next/image'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { useEffect } from 'react'
-import logo from '../../public/logo.png'
-import { useUserStore } from '../_store/useUserStore'
-import metadata from '../metadata'
 
 export default function CustomersHeader() {
   const { name, setName } = useUserStore()
@@ -29,12 +29,12 @@ export default function CustomersHeader() {
         <nav className="space-x-8">
           <Link
             href="/customers"
-            className="inline-block leading-5 transition-colors hover:text-halloween hover:underline"
+            className="hover:text-halloween inline-block leading-5 transition-colors hover:underline"
           >
             Clientes
           </Link>
           <button
-            className="inline-block cursor-pointer leading-5 transition-colors hover:text-halloween hover:underline"
+            className="hover:text-halloween inline-block cursor-pointer leading-5 transition-colors hover:underline"
             onClick={handleLogout}
           >
             Sair
