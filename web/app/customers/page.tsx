@@ -1,11 +1,13 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { count } from './_actions/customers'
+import { count, fetchAll } from './_actions/customers'
 import CustomerCard from './_components/CustomerCard'
+import { Customer } from './_types/Customer'
 
 export default function CustomersPage() {
   const [total, setTotal] = useState(0)
+  const [customers, setCustomers] = useState<Customer[]>([])
 
   useEffect(() => {
     async function countCustomers() {
@@ -13,6 +15,12 @@ export default function CustomersPage() {
       setTotal(countCustomers.total)
     }
     countCustomers()
+
+    async function fetchCustomers() {
+      const res = await fetchAll()
+      setCustomers(res)
+    }
+    fetchCustomers()
   }, [total])
 
   return (
@@ -33,7 +41,7 @@ export default function CustomersPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {[...Array(10)].map((customer, index) => (
+        {customers.map((customer, index) => (
           <CustomerCard key={index} {...customer} />
         ))}
       </div>
