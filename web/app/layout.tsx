@@ -1,14 +1,17 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import config from '../config'
 import './globals.css'
-import config from './metadata'
 
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
 })
 
-export const metadata: Metadata = config
+export const metadata: Metadata = {
+  title: config.title,
+  description: config.description,
+}
 
 export default function RootLayout({
   children,
