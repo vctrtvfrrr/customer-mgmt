@@ -1,6 +1,7 @@
 import formatMoney from '@/app/_libs/formatMoney'
 import { FormEvent, useState } from 'react'
 import { Customer } from '../_types/Customer'
+import { create, update } from '../_actions/customers'
 
 export default function CustomerForm({
   customer,
@@ -9,15 +10,42 @@ export default function CustomerForm({
   customer?: Customer
   closeAction: () => void
 }>) {
-  const [formData, setFormData] = useState<Customer | undefined>(customer)
+  const originalFormData = {
+    name: customer?.name || '',
+    salary: formatMoney(customer?.salary || 0),
+    companyValue: formatMoney(customer?.companyValue || 0),
+  }
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    setFormData({ ...formData, [e.target.name]: e.target.value } as Customer)
+  const [formData, setFormData] = useState(originalFormData)
+
+  function handleChange(e: FormEvent<HTMLInputElement>) {
+    const { name, value } = e.currentTarget
+    setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    closeAction()
+
+    if (!formData.name || !formData.salary || !formData.companyValue) return
+
+    const payload = {
+      name: formData.name,
+      salary: parseInt(formData.salary.replace(/\D/g, '')),
+      companyValue: parseInt(formData.companyValue.replace(/\D/g, '')),
+    }
+
+    try {
+      if (!customer?.id) {
+        await create(payload)
+      } else {
+        await update(customer.id, payload)
+      }
+
+      closeAction()
+    } catch (error) {
+      if (error instanceof Error) alert(error.message)
+      setFormData(originalFormData)
+    }
   }
 
   return (
@@ -29,21 +57,24 @@ export default function CustomerForm({
         <div className="flex flex-col space-y-2.5">
           <input
             type="text"
-            value={customer?.name}
+            name="name"
+            value={formData.name}
             className="w-full rounded-sm border-2 border-neutral-300 p-2 focus:outline-none"
             placeholder="Digite o nome:"
             onChange={handleChange}
           />
           <input
             type="text"
-            value={customer?.salary && formatMoney(customer.salary)}
+            name="salary"
+            value={formData.salary}
             className="w-full rounded-sm border-2 border-neutral-300 p-2 focus:outline-none"
             placeholder="Digite o salário:"
             onChange={handleChange}
           />
           <input
             type="text"
-            value={customer?.companyValue && formatMoney(customer.companyValue)}
+            name="companyValue"
+            value={formData.companyValue}
             className="w-full rounded-sm border-2 border-neutral-300 p-2 focus:outline-none"
             placeholder="Digite o valor da empresa:"
             onChange={handleChange}
