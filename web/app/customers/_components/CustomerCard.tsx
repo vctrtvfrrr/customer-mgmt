@@ -1,4 +1,5 @@
 import Modal from '@/app/_components/Modal'
+import formatMoney from '@/app/_libs/formatMoney'
 import { useState } from 'react'
 import { GoPencil, GoPlus, GoTrash } from 'react-icons/go'
 import { Customer } from '../_types/Customer'
@@ -6,15 +7,6 @@ import CustomerForm from './CustomerForm'
 
 export default function CustomerCard(customer: Customer) {
   const [isFormModalOpen, setIsFormModalOpen] = useState(false)
-
-  function formatMoney(value: number) {
-    const result = (value / 100)
-      .toFixed(2)
-      .replace('.', ',')
-      .replace(/(\d)(?=(\d{3})+,)/g, '$1.')
-
-    return `R$ ${result}`
-  }
 
   return (
     <>
