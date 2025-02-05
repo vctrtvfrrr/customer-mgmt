@@ -32,7 +32,7 @@ export default function HomePage() {
         />
         <button
           type="submit"
-          className="w-full cursor-pointer rounded-sm bg-[#ec6724] py-3.5 text-2xl font-bold text-white transition-colors hover:bg-orange-600 focus:outline-none"
+          className="bg-halloween hover:bg-halloween-dark w-full cursor-pointer rounded-sm py-3.5 text-2xl font-bold text-white transition-colors focus:outline-none"
         >
           Entrar
         </button>

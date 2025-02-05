@@ -29,12 +29,12 @@ export default function CustomersHeader() {
         <nav className="space-x-8">
           <Link
             href="/customers"
-            className="inline-block leading-5 transition-colors hover:text-[#ec6724] hover:underline"
+            className="inline-block leading-5 transition-colors hover:text-halloween hover:underline"
           >
             Clientes
           </Link>
           <button
-            className="inline-block cursor-pointer leading-5 transition-colors hover:text-[#ec6724] hover:underline"
+            className="inline-block cursor-pointer leading-5 transition-colors hover:text-halloween hover:underline"
             onClick={handleLogout}
           >
             Sair

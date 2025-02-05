@@ -5,6 +5,11 @@
   padding-inline: 2rem;
 }
 
+@theme {
+  --color-halloween: #ec6724;
+  --color-halloween-dark: #dd4d19;
+}
+
 body {
   @apply bg-neutral-100 font-sans text-black;
 }
