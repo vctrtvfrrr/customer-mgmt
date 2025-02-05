@@ -10,6 +10,10 @@ export class CustomersService {
     private customersRepository: Repository<Customer>,
   ) {}
 
+  count(): Promise<number> {
+    return this.customersRepository.count();
+  }
+
   findAll(take: number = 10, skip: number = 0): Promise<Customer[]> {
     return this.customersRepository.find({ take, skip });
   }

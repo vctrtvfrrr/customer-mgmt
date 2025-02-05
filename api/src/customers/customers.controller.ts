@@ -24,6 +24,20 @@ import { FindAllQueryDto } from './dtos/find-all-query.dto';
 export class CustomersController {
   constructor(private readonly customersService: CustomersService) {}
 
+  @Get('count')
+  async count() {
+    try {
+      const total = await this.customersService.count();
+      return { total };
+    } catch (error) {
+      if (error instanceof Error)
+        throw new HttpException(
+          error.message,
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+    }
+  }
+
   @Get()
   async findAll(
     @Query(new ValidationPipe({ transform: true })) params: FindAllQueryDto,
