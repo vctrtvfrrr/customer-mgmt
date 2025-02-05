@@ -2,11 +2,23 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
+import { useEffect } from 'react'
 import logo from '../../public/logo.png'
+import { useUserStore } from '../_store/useUserStore'
 import metadata from '../metadata'
 
 export default function CustomersHeader() {
-  function handleLogout() {}
+  const { name, setName } = useUserStore()
+
+  useEffect(() => {
+    if (name === '') redirect('/')
+  }, [name])
+
+  function handleLogout() {
+    setName('')
+    redirect('/')
+  }
 
   return (
     <header className="w-full bg-white shadow">
@@ -28,10 +40,11 @@ export default function CustomersHeader() {
             Sair
           </button>
         </nav>
-
-        <div>
-          Olá, <strong>Fulano</strong>!
-        </div>
+        {name && (
+          <div>
+            Olá, <strong>{name}</strong>!
+          </div>
+        )}
       </div>
     </header>
   )

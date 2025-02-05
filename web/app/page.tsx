@@ -1,13 +1,22 @@
 'use client'
 
-import { FormEvent, useState } from 'react'
+import { redirect } from 'next/navigation'
+import { FormEvent, useEffect, useState } from 'react'
+import { useUserStore } from './_store/useUserStore'
 
 export default function HomePage() {
-  const [name, setName] = useState('')
+  const [formName, setFormName] = useState('')
+  const { name, setName } = useUserStore()
+
+  useEffect(() => {
+    if (name !== '') redirect('/customers')
+  }, [name])
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault()
-    alert(`Olá, ${name}!`)
+    if (formName === '') return
+    setName(formName)
+    redirect('/customers')
   }
 
   return (
@@ -18,8 +27,8 @@ export default function HomePage() {
           type="text"
           placeholder="Digite o seu nome:"
           className="w-full border-2 border-neutral-300 px-5 py-3.5 text-2xl leading-7 text-neutral-400 focus:outline-none"
+          onChange={(e) => setFormName(e.target.value)}
           autoFocus
-          onInput={(e) => setName((e.target as HTMLInputElement).value)}
         />
         <button
           type="submit"
