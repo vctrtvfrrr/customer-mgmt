@@ -12,11 +12,13 @@ export async function fetchAll(pageNumber: number = 1, pageSize: number = 10): P
 }
 
 export async function create(customer: Partial<Customer>): Promise<Customer> {
-  console.log('create:', customer)
   return await API.post('customers', customer)
 }
 
 export async function update(id: number, customer: Partial<Customer>): Promise<Customer> {
-  console.log('update:', customer)
   return await API.patch(`customers/${id}`, customer)
+}
+
+export async function remove(id: number): Promise<void> {
+  return await API.delete(`customers/${id}`)
 }

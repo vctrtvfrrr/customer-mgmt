@@ -46,15 +46,13 @@ async function patch(endpoint: string, body: any, extraOptions?: RequestInit): P
 }
 
 // prefixed with underscored because delete is a reserved word in javascript
-async function _delete(endpoint: string, extraOptions?: RequestInit): Promise<any> {
+async function _delete(endpoint: string, extraOptions?: RequestInit): Promise<void> {
   const requestOptions = {
     ...extraOptions,
     method: 'DELETE',
   }
 
-  const response = await fetch(`${API_URL}/${endpoint.replace(/^\//, '')}`, requestOptions)
-
-  return handleResponse(response)
+  await fetch(`${API_URL}/${endpoint.replace(/^\//, '')}`, requestOptions)
 }
 
 async function handleResponse(response: Response) {

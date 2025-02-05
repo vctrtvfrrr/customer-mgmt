@@ -4,9 +4,17 @@ import { useState } from 'react'
 import { GoPencil, GoPlus, GoTrash } from 'react-icons/go'
 import { Customer } from '../_types/Customer'
 import CustomerForm from './CustomerForm'
+import DeleteModal from './DeleteModal'
 
-export default function CustomerCard(customer: Customer) {
+export default function CustomerCard({
+  customer,
+  onChange,
+}: Readonly<{
+  customer: Customer
+  onChange: () => Promise<void>
+}>) {
   const [isFormModalOpen, setIsFormModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
   return (
     <>
@@ -38,6 +46,7 @@ export default function CustomerCard(customer: Customer) {
           <button
             className="cursor-pointer text-red-500 transition-colors hover:text-red-700 focus:outline-none"
             title="Deletar cliente"
+            onClick={() => setIsDeleteModalOpen(true)}
           >
             <GoTrash />
           </button>
@@ -45,7 +54,24 @@ export default function CustomerCard(customer: Customer) {
       </div>
 
       <Modal isOpen={isFormModalOpen} closeAction={() => setIsFormModalOpen(false)}>
-        <CustomerForm customer={customer} closeAction={() => setIsFormModalOpen(false)} />
+        <CustomerForm
+          customer={customer}
+          closeAction={async () => {
+            setIsFormModalOpen(false)
+            await onChange()
+          }}
+        />
+      </Modal>
+
+      <Modal isOpen={isDeleteModalOpen} closeAction={() => setIsDeleteModalOpen(false)}>
+        <DeleteModal
+          customerId={customer.id}
+          customerName={customer.name}
+          closeAction={async () => {
+            setIsDeleteModalOpen(false)
+            await onChange()
+          }}
+        />
       </Modal>
     </>
   )

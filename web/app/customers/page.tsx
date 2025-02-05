@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Modal from '../_components/Modal'
 import { count, fetchAll } from './_actions/customers'
 import CustomerCard from './_components/CustomerCard'
@@ -14,6 +14,11 @@ export default function CustomersPage() {
   const [pageSize, setPageSize] = useState(10)
   const [isFormModalOpen, setIsFormModalOpen] = useState(false)
 
+  const fetchCustomers = useCallback(async () => {
+    const res = await fetchAll(pageNumber, pageSize)
+    setCustomers(res)
+  }, [pageNumber, pageSize])
+
   useEffect(() => {
     async function countCustomers() {
       const countCustomers = await count()
@@ -22,13 +27,8 @@ export default function CustomersPage() {
       if (pageNumber > totalPages) setPageNumber(totalPages)
     }
     countCustomers()
-
-    async function fetchCustomers() {
-      const res = await fetchAll(pageNumber, pageSize)
-      setCustomers(res)
-    }
     fetchCustomers()
-  }, [pageNumber, pageSize, total])
+  }, [pageNumber, pageSize, total, fetchCustomers])
 
   return (
     <main className="container my-8">
@@ -53,7 +53,14 @@ export default function CustomersPage() {
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {customers.map((customer, index) => (
-          <CustomerCard key={index} {...customer} />
+          <CustomerCard
+            key={index}
+            customer={customer}
+            onChange={async () => {
+              await fetchCustomers()
+              setIsFormModalOpen(false)
+            }}
+          />
         ))}
       </div>
 
@@ -66,7 +73,12 @@ export default function CustomersPage() {
       </button>
 
       <Modal isOpen={isFormModalOpen} closeAction={() => setIsFormModalOpen(false)}>
-        <CustomerForm closeAction={() => setIsFormModalOpen(false)} />
+        <CustomerForm
+          closeAction={async () => {
+            await fetchCustomers()
+            setIsFormModalOpen(false)
+          }}
+        />
       </Modal>
     </main>
   )

@@ -1,14 +1,14 @@
 import formatMoney from '@/app/_libs/formatMoney'
 import { FormEvent, useState } from 'react'
-import { Customer } from '../_types/Customer'
 import { create, update } from '../_actions/customers'
+import { Customer } from '../_types/Customer'
 
 export default function CustomerForm({
   customer,
   closeAction,
 }: Readonly<{
   customer?: Customer
-  closeAction: () => void
+  closeAction: () => Promise<void>
 }>) {
   const originalFormData = {
     name: customer?.name || '',
@@ -41,7 +41,7 @@ export default function CustomerForm({
         await update(customer.id, payload)
       }
 
-      closeAction()
+      await closeAction()
     } catch (error) {
       if (error instanceof Error) alert(error.message)
       setFormData(originalFormData)
