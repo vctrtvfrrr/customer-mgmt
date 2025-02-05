@@ -10,7 +10,7 @@ import { Customer } from './_types/Customer'
 export default function CustomersPage() {
   const [total, setTotal] = useState(0)
   const [customers, setCustomers] = useState<Customer[]>([])
-  const [pageNumber, setPageNumber] = useState(1)
+  const [pageNumber] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [isFormModalOpen, setIsFormModalOpen] = useState(false)
 
@@ -23,8 +23,6 @@ export default function CustomersPage() {
     async function countCustomers() {
       const countCustomers = await count()
       setTotal(countCustomers.total)
-      const totalPages = Math.ceil(countCustomers.total / pageSize)
-      if (pageNumber > totalPages) setPageNumber(totalPages)
     }
     countCustomers()
     fetchCustomers()
