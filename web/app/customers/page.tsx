@@ -1,8 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Modal from '../_components/Modal'
 import { count, fetchAll } from './_actions/customers'
 import CustomerCard from './_components/CustomerCard'
+import CustomerForm from './_components/CustomerForm'
 import { Customer } from './_types/Customer'
 
 export default function CustomersPage() {
@@ -10,6 +12,7 @@ export default function CustomersPage() {
   const [customers, setCustomers] = useState<Customer[]>([])
   const [pageNumber, setPageNumber] = useState(1)
   const [pageSize, setPageSize] = useState(10)
+  const [isFormModalOpen, setIsFormModalOpen] = useState(false)
 
   useEffect(() => {
     async function countCustomers() {
@@ -54,9 +57,17 @@ export default function CustomersPage() {
         ))}
       </div>
 
-      <button className="border-halloween text-halloween hover:border-halloween-dark hover:text-halloween-dark mt-5 w-full cursor-pointer rounded-sm border-2 p-2.5 text-sm font-bold leading-4 focus:outline-none">
+      <button
+        type="button"
+        className="border-halloween text-halloween hover:border-halloween-dark hover:text-halloween-dark mt-5 w-full cursor-pointer rounded-sm border-2 p-2.5 text-sm font-bold leading-4 focus:outline-none"
+        onClick={() => setIsFormModalOpen(true)}
+      >
         Criar cliente
       </button>
+
+      <Modal isOpen={isFormModalOpen} closeAction={() => setIsFormModalOpen(false)}>
+        <CustomerForm closeAction={() => setIsFormModalOpen(false)} />
+      </Modal>
     </main>
   )
 }
