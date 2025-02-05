@@ -10,8 +10,8 @@ export class CustomersService {
     private customersRepository: Repository<Customer>,
   ) {}
 
-  findAll(): Promise<Customer[]> {
-    return this.customersRepository.find();
+  findAll(take: number = 10, skip: number = 0): Promise<Customer[]> {
+    return this.customersRepository.find({ take, skip });
   }
 
   findOne(id: number): Promise<Customer | null> {

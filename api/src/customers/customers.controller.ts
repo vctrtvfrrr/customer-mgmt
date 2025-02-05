@@ -11,21 +11,32 @@ import {
   Param,
   Patch,
   Post,
+  Query,
+  ValidationPipe,
 } from '@nestjs/common';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dtos/create-customer.dto';
 import { UpdateCustomerDto } from './dtos/update-customer.dto';
 import { EntityNotFoundError } from 'typeorm';
+import { FindAllQueryDto } from './dtos/find-all-query.dto';
 
 @Controller('customers')
 export class CustomersController {
   constructor(private readonly customersService: CustomersService) {}
 
   @Get()
-  async findAll() {
+  async findAll(
+    @Query(new ValidationPipe({ transform: true })) params: FindAllQueryDto,
+  ) {
+    const pageNumber = params?.pageNumber ? params.pageNumber : 1;
+    const pageSize = params?.pageSize ? params.pageSize : 10;
+
     try {
-      return await this.customersService.findAll();
-    } catch (error: unknown) {
+      return await this.customersService.findAll(
+        pageSize,
+        pageSize * (pageNumber - 1),
+      );
+    } catch (error) {
       if (error instanceof Error)
         throw new HttpException(
           error.message,
