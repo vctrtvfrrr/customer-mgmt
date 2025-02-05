@@ -8,20 +8,24 @@ import { Customer } from './_types/Customer'
 export default function CustomersPage() {
   const [total, setTotal] = useState(0)
   const [customers, setCustomers] = useState<Customer[]>([])
+  const [pageNumber, setPageNumber] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
 
   useEffect(() => {
     async function countCustomers() {
       const countCustomers = await count()
       setTotal(countCustomers.total)
+      const totalPages = Math.ceil(countCustomers.total / pageSize)
+      if (pageNumber > totalPages) setPageNumber(totalPages)
     }
     countCustomers()
 
     async function fetchCustomers() {
-      const res = await fetchAll()
+      const res = await fetchAll(pageNumber, pageSize)
       setCustomers(res)
     }
     fetchCustomers()
-  }, [total])
+  }, [pageNumber, pageSize, total])
 
   return (
     <main className="container my-8">
@@ -32,7 +36,11 @@ export default function CustomersPage() {
 
         <div className="flex">
           <p className="text-lg leading-6">Clientes por página:</p>
-          <select className="leading-3.5 ml-2 rounded-sm border border-gray-300 text-xs focus:outline-none">
+          <select
+            className="leading-3.5 ml-2 rounded-sm border border-gray-300 text-xs focus:outline-none"
+            value={pageSize}
+            onChange={(e) => setPageSize(Number(e.target.value))}
+          >
             <option value="10">10</option>
             <option value="20">20</option>
             <option value="50">50</option>
